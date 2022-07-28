@@ -11,6 +11,7 @@ function User:new(userName)
         loginDate = getTime(2),
         dropItems = {}
     }
+
     function obj:saveLog()
         local file = io.open(self.logPath, "a")
         file:write('['..self.logs.loginDate..']'..'\n')
@@ -28,6 +29,14 @@ function User:new(userName)
         end
     end
 
+    function obj:update(logType, data) --logType - тип логирования, data - лог
+        checkArg(1, 'string')
+        if not self.logs[logType] then
+            self.logs[logType] = {} 
+        end
+        self.logs[logType] = data 
+    end  
+
     function obj:logout()
         computer.removeUser(self.nick)
     end
@@ -36,6 +45,7 @@ function User:new(userName)
     self.__index = self;
     return obj
 end
+
 
 
 function getHostTime(timezone) --Получить текущее реальное время компьютера, хостящего сервер майна
@@ -56,4 +66,11 @@ function getTime(timezone) --Получет настоящее время, ст�
 return text
 end
 
-return User
+return User   
+        
+-- u = user.new("num_pi")
+-- u.update('auth', true) u.logs['arg1'].insert('...')
+-- u.update('buy', 'wool:35:4:5:6')
+-- u.update('auth', false)
+-- u.save()
+-- u.leave()
